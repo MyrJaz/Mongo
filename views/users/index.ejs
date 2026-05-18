@@ -1,0 +1,60 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+  <h1 style="margin:0">Usuarios</h1>
+  <a href="/users/new" class="btn btn-primary">+ Nuevo usuario</a>
+</div>
+
+<form method="GET" action="/users" class="search-bar card">
+  <div style="flex:2; min-width:200px;">
+    <label>Buscar</label>
+    <input type="text" name="q" value="<%= q || '' %>" placeholder="username, email, ciudad..." />
+  </div>
+  <div style="flex:1; min-width:130px;">
+    <label>Segmento</label>
+    <select name="segment">
+      <option value="">Todos</option>
+      <% segments.forEach(s => { %>
+        <option value="<%= s %>" <%= segment === s ? 'selected' : '' %>><%= s %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div style="align-self:flex-end;">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <a href="/users" class="btn btn-secondary" style="margin-left:4px;">Limpiar</a>
+  </div>
+</form>
+
+<% if (users.length === 0) { %>
+  <div class="empty">No se encontraron usuarios.</div>
+<% } else { %>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table>
+      <thead>
+        <tr><th>Usuario</th><th>Email</th><th>Ciudad</th><th>Segmento</th><th>Edad</th><th>Acciones</th></tr>
+      </thead>
+      <tbody>
+        <% users.forEach(u => { %>
+        <tr>
+          <td><a href="/users/<%= u._id %>"><strong><%= u.username %></strong></a></td>
+          <td class="text-muted"><%= u.contact.email %></td>
+          <td><%= u.contact.city %>, <%= u.contact.country %></td>
+          <td><span class="badge <%= u.segment === 'Premium' ? 'orange' : u.segment === 'Standard' ? 'blue' : '' %>"><%= u.segment %></span></td>
+          <td><%= u.demographics.age %></td>
+          <td>
+            <div class="actions">
+              <a href="/users/<%= u._id %>/edit" class="btn btn-secondary btn-sm">Editar</a>
+              <form method="POST" action="/users/<%= u._id %>/delete" onsubmit="return confirm('Eliminar a este usuario y sus interacciones?')">
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-muted mt" style="margin-top:0.8rem;"><%= users.length %> usuario(s) encontrado(s)</p>
+<% } %>
+
+<%- include('../partials/footer') %>

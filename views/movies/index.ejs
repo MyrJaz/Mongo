@@ -1,0 +1,69 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1.5rem;">
+  <h1 style="margin:0">Peliculas</h1>
+  <a href="/movies/new" class="btn btn-primary">+ Nueva pelicula</a>
+</div>
+
+<form method="GET" action="/movies" class="search-bar card">
+  <div style="flex:2; min-width:200px;">
+    <label>Buscar por titulo</label>
+    <input type="text" name="q" value="<%= q || '' %>" placeholder="Inception, Matrix..." />
+  </div>
+  <div style="flex:1; min-width:140px;">
+    <label>Genero</label>
+    <select name="genre">
+      <option value="">Todos</option>
+      <% allGenres.forEach(g => { %>
+        <option value="<%= g %>" <%= genre === g ? 'selected' : '' %>><%= g %></option>
+      <% }) %>
+    </select>
+  </div>
+  <div style="min-width:100px;">
+    <label>Ano</label>
+    <input type="number" name="year" value="<%= year || '' %>" placeholder="2019" min="1900" max="2030" />
+  </div>
+  <div style="align-self:flex-end;">
+    <button type="submit" class="btn btn-primary">Filtrar</button>
+    <a href="/movies" class="btn btn-secondary" style="margin-left:4px;">Limpiar</a>
+  </div>
+</form>
+
+<% if (movies.length === 0) { %>
+  <div class="empty">No se encontraron peliculas con esos filtros.</div>
+<% } else { %>
+  <div class="card" style="padding:0; overflow:hidden;">
+    <table>
+      <thead>
+        <tr>
+          <th>Titulo</th>
+          <th>Ano</th>
+          <th>Generos</th>
+          <th>Precio</th>
+          <th>Acciones</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% movies.forEach(m => { %>
+        <tr>
+          <td><a href="/movies/<%= m._id %>"><strong><%= m.title %></strong></a></td>
+          <td><%= m.year %></td>
+          <td><% (m.genres || []).forEach(g => { %><span class="badge"><%= g.name %></span><% }) %></td>
+          <td>$<%= m.price.toFixed(2) %></td>
+          <td>
+            <div class="actions">
+              <a href="/movies/<%= m._id %>/edit" class="btn btn-secondary btn-sm">Editar</a>
+              <form method="POST" action="/movies/<%= m._id %>/delete" onsubmit="return confirm('Eliminar esta pelicula?')">
+                <button type="submit" class="btn btn-danger btn-sm">Eliminar</button>
+              </form>
+            </div>
+          </td>
+        </tr>
+        <% }) %>
+      </tbody>
+    </table>
+  </div>
+  <p class="text-muted mt" style="margin-top:0.8rem;"><%= movies.length %> pelicula(s) encontrada(s)</p>
+<% } %>
+
+<%- include('../partials/footer') %>

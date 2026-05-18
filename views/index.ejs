@@ -1,0 +1,44 @@
+<%- include('partials/header') %>
+
+<h1>Dashboard</h1>
+
+<div class="stat-grid">
+  <div class="stat-card">
+    <div class="num"><%= movieCount %></div>
+    <div class="label">Peliculas</div>
+  </div>
+  <div class="stat-card">
+    <div class="num"><%= userCount %></div>
+    <div class="label">Usuarios</div>
+  </div>
+  <div class="stat-card">
+    <div class="num"><%= interactionCount %></div>
+    <div class="label">Interacciones</div>
+  </div>
+</div>
+
+<div class="grid-2">
+  <a href="/movies" class="card" style="display:block; text-decoration:none; color:inherit;">
+    <h2>Peliculas</h2>
+    <p class="text-muted">Catalogo de peliculas con generos embebidos. Filtra por genero, ano o titulo.</p>
+    <div class="mt"><span class="btn btn-primary btn-sm">Ver catalogo</span></div>
+  </a>
+  <a href="/users" class="card" style="display:block; text-decoration:none; color:inherit;">
+    <h2>Usuarios</h2>
+    <p class="text-muted">Usuarios con contacto y datos demograficos embebidos, e historial de interacciones referenciado.</p>
+    <div class="mt"><span class="btn btn-primary btn-sm">Ver usuarios</span></div>
+  </a>
+</div>
+
+<div class="card mt" style="margin-top:1rem;">
+  <h2>Sobre el modelo</h2>
+  <p class="text-muted" style="line-height:1.7">
+    Esta app usa 3 colecciones en MongoDB:
+    <code style="color:#93c5fd">movies</code> (generos embebidos),
+    <code style="color:#93c5fd">users</code> (contacto y demograficos embebidos), e
+    <code style="color:#93c5fd">interactions</code> (referencias a ambas).
+    Consulta el archivo MODEL.md para ver todas las decisiones de diseno.
+  </p>
+</div>
+
+<%- include('partials/footer') %>

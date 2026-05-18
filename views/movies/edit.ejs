@@ -1,0 +1,54 @@
+<%- include('../partials/header') %>
+
+<a href="/movies/<%= movie._id %>" class="text-muted">Volver a <%= movie.title %></a>
+<h1>Editar pelicula</h1>
+
+<div class="card">
+  <form method="POST" action="/movies/<%= movie._id %>/update">
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Titulo *</label>
+        <input type="text" name="title" required value="<%= movie.title %>" />
+      </div>
+      <div class="form-group">
+        <label>Ano *</label>
+        <input type="number" name="year" required value="<%= movie.year %>" min="1900" max="2030" />
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Duracion (minutos)</label>
+        <input type="number" name="runtime_minutes" value="<%= movie.runtime_minutes %>" min="1" />
+      </div>
+      <div class="form-group">
+        <label>Precio ($)</label>
+        <input type="number" name="price" step="0.01" value="<%= movie.price %>" min="0" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Sinopsis</label>
+      <textarea name="summary"><%= movie.summary %></textarea>
+    </div>
+    <div class="form-group">
+      <label>Premios</label>
+      <input type="text" name="awards" value="<%= movie.awards || '' %>" />
+    </div>
+    <div class="form-group">
+      <label>Generos</label>
+      <div class="genre-grid">
+        <% const currentGenres = (movie.genres || []).map(g => g.name); %>
+        <% allGenres.forEach(g => { %>
+          <input type="checkbox" name="genres" value="<%= g %>" id="g-<%= g %>" class="genre-check"
+            <%= currentGenres.includes(g) ? 'checked' : '' %> />
+          <label for="g-<%= g %>" class="genre-label"><%= g %></label>
+        <% }) %>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Guardar cambios</button>
+      <a href="/movies/<%= movie._id %>" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

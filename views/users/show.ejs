@@ -1,0 +1,73 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+  <div>
+    <a href="/users" class="text-muted">Volver a usuarios</a>
+    <h1 style="margin-top:0.4rem"><%= user.username %></h1>
+    <span class="badge <%= user.segment === 'Premium' ? 'orange' : user.segment === 'Standard' ? 'blue' : '' %>"><%= user.segment %></span>
+  </div>
+  <div class="actions">
+    <a href="/users/<%= user._id %>/edit" class="btn btn-secondary">Editar</a>
+    <form method="POST" action="/users/<%= user._id %>/delete" onsubmit="return confirm('Eliminar este usuario y todas sus interacciones?')">
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <div class="card">
+      <h2>Contacto <span class="text-muted">(embebido)</span></h2>
+      <table>
+        <tr><td style="color:#888; width:100px;">Email</td><td><%= user.contact.email %></td></tr>
+        <tr><td style="color:#888;">Telefono</td><td><%= user.contact.phone || '-' %></td></tr>
+        <tr><td style="color:#888;">Ciudad</td><td><%= user.contact.city %>, <%= user.contact.country %></td></tr>
+        <tr><td style="color:#888;">Direccion</td><td><%= user.contact.street_address || '-' %></td></tr>
+      </table>
+      <p class="text-muted" style="margin-top:0.8rem; font-size:0.8rem;">El contacto esta embebido en el documento del usuario (relacion 1:1).</p>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h2>Demografia <span class="text-muted">(embebida)</span></h2>
+      <table>
+        <tr><td style="color:#888; width:120px;">Edad</td><td><%= user.demographics.age %> anos</td></tr>
+        <tr><td style="color:#888;">Genero</td><td><%= user.demographics.gender %></td></tr>
+        <tr><td style="color:#888;">Educacion</td><td><%= user.demographics.education %></td></tr>
+        <tr><td style="color:#888;">Ingresos</td><td><%= user.demographics.income_level %></td></tr>
+        <tr><td style="color:#888;">Estado civil</td><td><%= user.demographics.marital_status %></td></tr>
+      </table>
+    </div>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Historial <span class="text-muted">(referenciado)</span></h2>
+      <% if (history.length === 0) { %>
+        <p class="text-muted">Sin interacciones registradas.</p>
+      <% } else { %>
+        <table>
+          <thead><tr><th>Pelicula</th><th>Tipo</th><th>Rating</th><th>Fecha</th></tr></thead>
+          <tbody>
+            <% history.forEach(i => { %>
+            <tr>
+              <td>
+                <% if (i.movie) { %>
+                  <a href="/movies/<%= i.movie._id %>"><%= i.movie.title %></a>
+                <% } else { %>
+                  <span class="text-muted">ID: <%= i.movie_id %></span>
+                <% } %>
+              </td>
+              <td><span class="badge <%= i.type === 'purchase' ? 'green' : i.type === 'rental' ? 'blue' : '' %>"><%= i.type %></span></td>
+              <td><%= i.rating ? i.rating.toFixed(1) : '-' %></td>
+              <td class="text-muted"><%= new Date(i.date).toLocaleDateString('es-MX') %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <p class="text-muted" style="margin-top:0.5rem; font-size:0.8rem;">Las interacciones se cargan con $lookup desde la coleccion separada.</p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

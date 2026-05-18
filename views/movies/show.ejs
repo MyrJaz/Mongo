@@ -1,0 +1,86 @@
+<%- include('../partials/header') %>
+
+<div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.5rem; flex-wrap:wrap; gap:1rem;">
+  <div>
+    <a href="/movies" class="text-muted">Volver a peliculas</a>
+    <h1 style="margin-top:0.4rem"><%= movie.title %></h1>
+  </div>
+  <div class="actions">
+    <a href="/movies/<%= movie._id %>/edit" class="btn btn-secondary">Editar</a>
+    <form method="POST" action="/movies/<%= movie._id %>/delete" onsubmit="return confirm('Eliminar esta pelicula?')">
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+  </div>
+</div>
+
+<div class="grid-2">
+  <div>
+    <div class="card">
+      <h2>Detalles</h2>
+      <table>
+        <tr><td style="color:#888; width:130px;">Ano</td><td><%= movie.year %></td></tr>
+        <tr><td style="color:#888;">Duracion</td><td><%= movie.runtime_minutes %> min</td></tr>
+        <tr><td style="color:#888;">Precio</td><td>$<%= movie.price.toFixed(2) %></td></tr>
+        <tr><td style="color:#888;">Premios</td><td><%= movie.awards || '-' %></td></tr>
+      </table>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h2>Generos <span class="text-muted">(embebidos)</span></h2>
+      <% if (movie.genres && movie.genres.length) { %>
+        <div class="genre-grid">
+          <% movie.genres.forEach(g => { %><span class="badge"><%= g.name %></span><% }) %>
+        </div>
+        <p class="text-muted" style="margin-top:0.8rem; font-size:0.8rem;">
+          Los generos estan embebidos directamente en el documento de la pelicula.
+        </p>
+      <% } else { %>
+        <p class="text-muted">Sin generos asignados.</p>
+      <% } %>
+    </div>
+
+    <% if (movie.cast && movie.cast.length) { %>
+    <div class="card" style="margin-top:1rem;">
+      <h2>Cast <span class="text-muted">(embebido)</span></h2>
+      <% movie.cast.forEach(a => { %>
+        <div style="margin-bottom:0.5rem;">
+          <strong><%= a.name %></strong> <span class="text-muted">como <%= a.role %></span>
+        </div>
+      <% }) %>
+    </div>
+    <% } %>
+  </div>
+
+  <div>
+    <div class="card">
+      <h2>Sinopsis</h2>
+      <p style="line-height:1.7; color:#ccc;"><%= movie.summary %></p>
+    </div>
+
+    <div class="card" style="margin-top:1rem;">
+      <h2>Ultimas interacciones <span class="text-muted">(referenciadas)</span></h2>
+      <% if (interactions.length === 0) { %>
+        <p class="text-muted">Sin interacciones aun.</p>
+      <% } else { %>
+        <table>
+          <thead><tr><th>Usuario</th><th>Tipo</th><th>Rating</th><th>Fecha</th></tr></thead>
+          <tbody>
+            <% interactions.forEach(i => { %>
+            <tr>
+              <td><%= i.user_id %></td>
+              <td><span class="badge <%= i.type === 'purchase' ? 'green' : i.type === 'rental' ? 'blue' : '' %>"><%= i.type %></span></td>
+              <td><%= i.rating ? i.rating.toFixed(1) : '-' %></td>
+              <td class="text-muted"><%= new Date(i.date).toLocaleDateString('es-MX') %></td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+        <p class="text-muted" style="margin-top:0.5rem; font-size:0.8rem;">
+          Las interacciones estan en una coleccion separada, referenciadas por movie_id.
+        </p>
+      <% } %>
+    </div>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>

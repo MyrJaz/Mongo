@@ -1,0 +1,62 @@
+<%- include('../partials/header') %>
+
+<a href="/users" class="text-muted">Volver a usuarios</a>
+<h1>Nuevo usuario</h1>
+
+<div class="card">
+  <form method="POST" action="/users">
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Username *</label>
+        <input type="text" name="username" required placeholder="usuario123" />
+      </div>
+      <div class="form-group">
+        <label>Segmento</label>
+        <select name="segment">
+          <% segments.forEach(s => { %><option value="<%= s %>"><%= s %></option><% }) %>
+        </select>
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Email *</label>
+        <input type="email" name="email" required placeholder="correo@ejemplo.com" />
+      </div>
+      <div class="form-group">
+        <label>Telefono</label>
+        <input type="text" name="phone" placeholder="+52-81-0000-0000" />
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input type="text" name="city" placeholder="Monterrey" />
+      </div>
+      <div class="form-group">
+        <label>Pais</label>
+        <input type="text" name="country" placeholder="MX" maxlength="2" />
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Edad</label>
+        <input type="number" name="age" placeholder="25" min="1" max="120" />
+      </div>
+      <div class="form-group">
+        <label>Genero</label>
+        <select name="gender">
+          <option value="M">Masculino</option>
+          <option value="F">Femenino</option>
+          <option value="Non-binary">No binario</option>
+          <option value="Unknown">Prefiero no decir</option>
+        </select>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Crear usuario</button>
+      <a href="/users" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>

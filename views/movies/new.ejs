@@ -1,0 +1,52 @@
+<%- include('../partials/header') %>
+
+<a href="/movies" class="text-muted">Volver a peliculas</a>
+<h1>Nueva pelicula</h1>
+
+<div class="card">
+  <form method="POST" action="/movies">
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Titulo *</label>
+        <input type="text" name="title" required placeholder="Titulo de la pelicula" />
+      </div>
+      <div class="form-group">
+        <label>Ano *</label>
+        <input type="number" name="year" required placeholder="2024" min="1900" max="2030" />
+      </div>
+    </div>
+    <div class="grid-2">
+      <div class="form-group">
+        <label>Duracion (minutos)</label>
+        <input type="number" name="runtime_minutes" placeholder="120" min="1" />
+      </div>
+      <div class="form-group">
+        <label>Precio ($)</label>
+        <input type="number" name="price" step="0.01" placeholder="3.99" min="0" />
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Sinopsis</label>
+      <textarea name="summary" placeholder="Descripcion de la pelicula..."></textarea>
+    </div>
+    <div class="form-group">
+      <label>Premios</label>
+      <input type="text" name="awards" placeholder="Oscar Best Picture 2024" />
+    </div>
+    <div class="form-group">
+      <label>Generos</label>
+      <div class="genre-grid">
+        <% allGenres.forEach(g => { %>
+          <input type="checkbox" name="genres" value="<%= g %>" id="g-<%= g %>" class="genre-check" />
+          <label for="g-<%= g %>" class="genre-label"><%= g %></label>
+        <% }) %>
+      </div>
+    </div>
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Crear pelicula</button>
+      <a href="/movies" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </form>
+</div>
+
+<%- include('../partials/footer') %>
